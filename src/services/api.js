@@ -1,11 +1,8 @@
 import axios from 'axios';
 import { tokenService } from './tokenService';
 
-// Use proxy during development, direct URL in production
-const isDevelopment = import.meta.env.DEV;
-const API_BASE_URL = isDevelopment 
-  ? '' // Empty string will use relative path with proxy
-  : 'https://jwt-auth-api-1-ej2w.onrender.com';
+// Use environment variable or fallback
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://jwt-auth-api-1-ej2w.onrender.com';
 
 const api = axios.create({
   baseURL: API_BASE_URL,
@@ -22,7 +19,6 @@ api.interceptors.request.use(
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
-    console.log('API Request:', config.method, config.url);
     return config;
   },
   (error) => {
@@ -33,17 +29,9 @@ api.interceptors.request.use(
 
 // Response interceptor to handle errors
 api.interceptors.response.use(
-  (response) => {
-    console.log('API Response:', response.status);
-    return response;
-  },
+  (response) => response,
   (error) => {
-    console.error('API Error:', {
-      message: error.message,
-      status: error.response?.status,
-      data: error.response?.data,
-      url: error.config?.url
-    });
+    console.error('API Error:', error.response?.status, error.config?.url);
     
     if (error.response?.status === 401) {
       tokenService.clearStorage();
