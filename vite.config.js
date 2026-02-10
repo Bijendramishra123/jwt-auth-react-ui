@@ -5,13 +5,9 @@ export default defineConfig({
   plugins: [react()],
   server: {
     port: 3000,
-    proxy: {
-      '/api': {
-        target: 'https://jwt-auth-api-1-ej2w.onrender.com',
-        changeOrigin: true,
-        secure: false,
-        rewrite: (path) => path
-      }
-    }
+  },
+  build: {
+    outDir: 'dist',
+    sourcemap: true
   }
 })

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Navbar as BSNavbar, Nav, Container, Button } from 'react-bootstrap';
-import authService from '../services/auth'; // DEFAULT import
+import authService from '../services/auth';
 
 const NavigationBar = () => {
   const navigate = useNavigate();
